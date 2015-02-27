@@ -1,0 +1,17 @@
+Towards a Comprehensive Picture of the Great Firewall's DNS Censorship
+https://www.google.com/url?q=https%3A%2F%2Fwww.usenix.org%2Fconference%2Ffoci14%2Fworkshop-program%2Fpresentation%2Fanonymous&sa=D&sntz=1&usg=AFQjCNF7Tyv02V_hqu1znk9I3RbAI8-dPQ
+
+How China is Blocking Tor
+http://arxiv.org/pdf/1204.0447v1.pdf
+
+Insertion, Evasion, and Denial of Service: Eluding Network Intrusion Detection
+http://www.blacksheepnetworks.com/security/info/ids/idspaper/idspaper.html
+
+Target-Based TCP Stream Reassembly
+http://webpages.cs.luc.edu/~pld/courses/447/sum08/class5/novak,sturges.stream5_reassembly.pdf
+
+Firewalking
+http://packetfactory.openwall.net/projects/firewalk/firewalk-final.pdf
+
+Telex
+https://telex.cc/
