@@ -13,5 +13,8 @@ http://webpages.cs.luc.edu/~pld/courses/447/sum08/class5/novak,sturges.stream5_r
 Firewalking
 http://packetfactory.openwall.net/projects/firewalk/firewalk-final.pdf
 
+Towards Illuminating a Censorship Monitor's Model to Faciliate Evasion
+http://www.icir.org/vern/papers/censorship-model.foci13.pdf
+
 Telex
 https://telex.cc/
