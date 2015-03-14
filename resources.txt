@@ -24,3 +24,8 @@ https://en.wikipedia.org/wiki/IP_fragmentation_attack
 
 Rose IP Fragmentation Attack
 http://www.digital.net/~gandalf/Rose_Frag_Attack_Explained.htm
+
+IPv6
+https://www.youtube.com/watch?v=0-27y6CHNnA
+https://media.blackhat.com/bh-eu-12/Atlasis/bh-eu-12-Atlasis-Attacking_IPv6-WP.pdf
+https://www.blackhat.com/docs/us-14/materials/us-14-Atlasis-Evasion-Of-HighEnd-IPS-Devices-In-The-Age-Of-IPv6-WP.pdf
