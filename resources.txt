@@ -18,3 +18,9 @@ http://www.icir.org/vern/papers/censorship-model.foci13.pdf
 
 Telex
 https://telex.cc/
+
+IP Fragmentation Attack
+https://en.wikipedia.org/wiki/IP_fragmentation_attack
+
+Rose IP Fragmentation Attack
+http://www.digital.net/~gandalf/Rose_Frag_Attack_Explained.htm
