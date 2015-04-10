@@ -48,4 +48,4 @@ frag2=IPv6ExtHdrFragment(offset=myoffset, m=0, id=myid, nh=58)
 packet1=ipv6_1/frag1/icmpv6
 packet2=ipv6_1/frag2/payload2
 send(packet1)
-send(packet2) 
+send(packet2)
