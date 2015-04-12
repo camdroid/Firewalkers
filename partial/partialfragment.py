@@ -7,16 +7,18 @@ This client sends fragmented packets with data on one side on the fragment!
 class PacketEngine:
     def __init__(self):
         self.seq = 100
-        self.ackNum = 0
+        self.ackNum = 0 
         self.dport = 80
         self.sport = 1234
-        self.destIP = ''
-        self.srcIP = ''
+        self.destIP = '2601:4:f01:67d2:9eae:8fd9:46c:6fc3'
+        self.srcIP = 'fe80::a9bc:3fd5:1c27:15a'
 
     def handshake(self):
+        print 'handshake'
         ip = IPv6(src=self.srcIP, dst=self.destIP)
         syn = TCP(sport=self.sport, dport=self.dport, flags="S", seq=self.seq)
         synack = sr1(ip/syn)
+        synack.show2()
         self.seq += 1
 
         self.ackNum = synack.seq + 1
@@ -49,4 +51,4 @@ class PacketEngine:
 if __name__ == '__main__':
     packetEngine = PacketEngine()
     packetEngine.handshake()
-#    packetEngine.sendPacket("hello")
+    packetEngine.sendPacket("hello")
