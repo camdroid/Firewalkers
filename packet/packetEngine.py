@@ -15,8 +15,8 @@ class PacketEngine:
         self.ack = 0 
         self.dport = int(dport)
         self.sport = 5555
-        self.destIP = '2604:a880:800:10::7df:6001'
-        self.srcIP = '2601:4:f01:67d2:9eae:8fd9:46c:6fc3'
+        self.destIP = ''
+        self.srcIP = ''
 
     def handshake(self):
         ip = IPv6(src=self.srcIP, dst=self.destIP)
