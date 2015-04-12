@@ -1,54 +1,75 @@
+# python
+import logging
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
+
 from scapy.all import *
+import sys
 
 """
 This client sends fragmented packets with data on one side on the fragment!
 """
 
 class PacketEngine:
-    def __init__(self):
+    def __init__(self, dport):
         self.seq = 100
-        self.ackNum = 0 
-        self.dport = 80
-        self.sport = 1234
-        self.destIP = '2601:4:f01:67d2:9eae:8fd9:46c:6fc3'
-        self.srcIP = 'fe80::a9bc:3fd5:1c27:15a'
+        self.ack = 0 
+        self.dport = int(dport)
+        self.sport = 5555
+        self.destIP = '2604:a880:800:10::7df:6001'
+        self.srcIP = '2601:4:f01:67d2:9eae:8fd9:46c:6fc3'
 
     def handshake(self):
-        print 'handshake'
         ip = IPv6(src=self.srcIP, dst=self.destIP)
-        syn = TCP(sport=self.sport, dport=self.dport, flags="S", seq=self.seq)
-        synack = sr1(ip/syn)
-        synack.show2()
-        self.seq += 1
+        syn = ip/TCP(sport=self.sport, dport=self.dport, flags="S", seq=self.seq)
+        print '[SYN] Sending, seq=' + str(self.seq)
+        synack = sr1(syn)
+        print '[SYNACK] Received, sport=' + str(synack.sport) + ', seq=' + str(synack.ack) + ', ack=' + str(synack.seq)
 
-        self.ackNum = synack.seq + 1
-        ack = TCP(sport=self.sport, dport=self.dport, flags="A", seq=self.seq, ack=self.ackNum)
-        send(ip/ack)
-        self.seq += 1
+        ack = ip/TCP(sport=self.sport, dport=self.dport, flags="A", seq=synack.ack, ack=synack.seq+1)
+        send(ack)
+        print '[ACK] Sent, seq=' + str(synack.ack+1) + ', ack=' + str(synack.seq+1)
+
+        self.seq = synack.ack
+        self.ack = synack.seq+1
 
     def sendPacket(self, payload):
         ip = IPv6(src=self.srcIP, dst=self.destIP)
         extension = IPv6ExtHdrHopByHop()
 
-        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ackNum)
-        self.seq += 1
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
+        send(ip/tcp/payload)
+        print '[IPv6] Sent, seq=' + str(self.seq) + ', ack=' + str(self.ack)
 
-        #jumbo = Jumbo()
-        #jumbo.jumboplen = 2**30
-        #extension.options = jumbo
-        #packet = base/IPv6ExtHdrDestOpt()/IPv6ExtHdrRouting()/IPv6ExtHdrHopByHop()
+    def sendFragmentedPackets(self, payload1, payload2):
+        ip = IPv6(src=self.srcIP, dst=self.destIP, plen=16)
+        frag1 = IPv6ExtHdrFragment(offset=0, m=1 ,id=502, nh=58)
+        frag2 = IPv6ExtHdrFragment(offset=1, m=1 ,id=502, nh=58)
+        packet1 = ip/frag1/payload1
+        packet2 = ip/frag2/payload2
+        send(packet1)
+        send(packet2)
 
-        response = sr1(ip/extension/tcp/packet)
-        self.ackNum = response.ackNum
-        print response
-        self.fin()
-
+    # doesn't work
     def fin(self):
         ip = IPv6(src=self.srcIP, dst=self.destIP)
-        tcp = TCP(sport=self.sport, dport=self.dport, flags="A", seq=ackNum+10, ack=ackNum)
-        send(ip/tcp)
+        fin = ip/TCP(sport=self.sport, dport=self.dport, flags="F", seq=self.seq, ack=self.ack)
+        print '[FINACK] Sending, seq=' + str(self.seq) + ', ack=' + str(self.ack)
+        finack = sr1(finack)
+        print '[ACK] Received, flags=' + str(finack.flags) + ', seq=' + str(finack.seq) + ', ack=' + str(finack.ack)
+
+        fin2 = ip/TCP(sport=self.sport, dport=self.dport, flags="a", seq=finack.ack+1, ack=finack.seq+1)
+        send(fin2)
+        print '[FIN2] Sent, seq=' + str(finack.ack+1) + ', ack=' + str(finack.seq+1)
 
 if __name__ == '__main__':
-    packetEngine = PacketEngine()
+    if(len(sys.argv) <= 1):
+        print "Destination Port Required"
+        sys.exit(0)
+
+    payload1 = Raw("AABBCCDD")
+    payload2 = Raw("EEFFGGHH")
+
+    packetEngine = PacketEngine(sys.argv[1])
     packetEngine.handshake()
-    packetEngine.sendPacket("hello")
+    #packetEngine.sendPacket(payload1)
+    packetEngine.sendFragmentedPackets(payload1, payload2)
