@@ -4,32 +4,49 @@ from scapy.all import *
 This client sends fragmented packets with data on one side on the fragment!
 """
 
-payload = 'hello'
+class PacketEngine:
+    def __init__(self):
+        self.seq = 100
+        self.ackNum = 0
+        self.dport = 80
+        self.sport = 1234
+        self.destIP = ''
+        self.srcIP = ''
 
-def handshake():
-    ip = IPv6(src=srcIP, dst=destIP)
-    syn = TCP(sport=sport, dport=dport, flags="S", seq=100)
-    synack = sr1(ip/syn)
+    def handshake(self):
+        ip = IPv6(src=self.srcIP, dst=self.destIP)
+        syn = TCP(sport=self.sport, dport=self.dport, flags="S", seq=self.seq)
+        synack = sr1(ip/syn)
+        self.seq += 1
 
-    my_ack = synack.seq + 1
-    ack = TCP(sport=sport, dport=dport, flags="A", seq=101, ack=my_ack)
-    send(ip/ack)
+        self.ackNum = synack.seq + 1
+        ack = TCP(sport=self.sport, dport=self.dport, flags="A", seq=self.seq, ack=self.ackNum)
+        send(ip/ack)
+        self.seq += 1
 
-def constructPacket():
-    base = IPv6(src=srcIP, dst=destIP)
-    extension = IPv6ExtHdrHopByHop()
+    def sendPacket(self, payload):
+        ip = IPv6(src=self.srcIP, dst=self.destIP)
+        extension = IPv6ExtHdrHopByHop()
 
-    #jumbo = Jumbo()
-    #jumbo.jumboplen = 2**30
-    #extension.options = jumbo
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ackNum)
+        self.seq += 1
 
-    #packet = base/IPv6ExtHdrDestOpt()/IPv6ExtHdrRouting()/IPv6ExtHdrHopByHop()
-    return base/extension/payload
+        #jumbo = Jumbo()
+        #jumbo.jumboplen = 2**30
+        #extension.options = jumbo
+        #packet = base/IPv6ExtHdrDestOpt()/IPv6ExtHdrRouting()/IPv6ExtHdrHopByHop()
+
+        response = sr1(ip/extension/tcp/packet)
+        self.ackNum = response.ackNum
+        print response
+        self.fin()
+
+    def fin(self):
+        ip = IPv6(src=self.srcIP, dst=self.destIP)
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="A", seq=ackNum+10, ack=ackNum)
+        send(ip/tcp)
 
 if __name__ == '__main__':
-    handshake()
-    packet = constructPacket()
-    packet.show2()
-    send(packet) 
-    #response = sr1(packet)
-    #print response
+    packetEngine = PacketEngine()
+    packetEngine.handshake()
+#    packetEngine.sendPacket("hello")
