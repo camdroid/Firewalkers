@@ -14,7 +14,7 @@ def constructPacket():
     extension = IPv6ExtHdrHopByHop()
 
     jumbo = Jumbo()
-    jumbo.jumboplen = 2++30
+    jumbo.jumboplen = 2**30
     extension.options = jumbo
 
     #packet = base/IPv6ExtHdrDestOpt()/IPv6ExtHdrRouting()/IPv6ExtHdrHopByHop()
