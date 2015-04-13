@@ -38,7 +38,7 @@ if __name__ == '__main__':
 	print "\n"
 #	ssock.send("GET /?q=vpn.*\xe5\x85\x8d\xe8\xb4\xb9\n\n")
 #	print ssock.recv(1024)
-#	ssock.send("GET /?q=\xe8\x8b\x8f\xe7\xbb\x8d\xe6\x99\xba\x20\x0a\n\n")
+#	ssock.send("GET /?q=\xe8\x8b\x8f\xe7\xbb\x8d\xe6\x99\xba\x20\x0a\n\n") 
 #	print ssock.recv(1024)
 	ssock.send("GET /?q=hi\n\n")
 	ssock.recv(1024)

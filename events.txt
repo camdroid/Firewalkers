@@ -1,0 +1,98 @@
+POST
+Path: /
+Http-Version: HTTP/1.1
+Host: dingus.cn
+User-Agent: Python/2.7.6
+Accept: */*
+Connection: Keep-Alive
+action=WriteShit&message=习近平的选择
+GET http://www.baidu.com/ HTTP/1.1
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0                                                                        .50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
+Accept: */*
+Host: www.baidu.com
+Proxy-Connection: Close
+
+
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/threading.py", line 552, in __bootstrap_inner
+    self.run()
+  File "/usr/local/lib/python2.7/threading.py", line 505, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "bhpnet.py", line 139, in client_handler
+    print client_socket.recv(1024)
+error: [Errno 104] Connection reset by peer
+
+GET / HTTP/1.0
+
+
+OPTIONS / HTTP/1.0
+
+
+OPTIONS / RTSP/1.0
+
+
+l
+
+GET /nice%20ports%2C/Tri%6Eity.txt%2ebak HTTP/1.0
+
+
+A:0▒▒▒▒▒test.$cmd▒▒▒▒erverStatus▒?
+
+
+
+SO?G▒▒,▒▒`~▒▒{▒Ֆ▒w▒▒▒▒<=▒o▒n(
+fedcba`
+PuTTY▒(-SP▒▒▒
+
+
+POST
+Path: /
+Http-Version: HTTP/1.1
+Host: dingus.cn
+User-Agent: Python/2.7.6
+Accept: */*
+Connection: Keep-Alive
+action=WriteShit&message=习近平的选择
+GET http://www.baidu.com/ HTTP/1.1
+User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0                                                                        .50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)
+Accept: */*
+Host: www.baidu.com
+Proxy-Connection: Close
+
+
+Exception in thread Thread-3:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/threading.py", line 552, in __bootstrap_inner
+    self.run()
+  File "/usr/local/lib/python2.7/threading.py", line 505, in run
+    self.__target(*self.__args, **self.__kwargs)
+  File "bhpnet.py", line 139, in client_handler
+    print client_socket.recv(1024)
+error: [Errno 104] Connection reset by peer
+
+GET / HTTP/1.0
+
+
+OPTIONS / HTTP/1.0
+
+
+OPTIONS / RTSP/1.0
+
+
+l
+
+GET /nice%20ports%2C/Tri%6Eity.txt%2ebak HTTP/1.0
+
+
+A:0▒▒▒▒▒test.$cmd▒▒▒▒erverStatus▒?
+
+
+
+SO?G▒▒,▒▒`~▒▒{▒Ֆ▒w▒▒▒▒<=▒o▒n(
+fedcba`
+PuTTY▒(-SP▒▒▒
+
+
+
+ls^Z

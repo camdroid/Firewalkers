@@ -49,6 +49,22 @@ class PacketEngine:
         send(packet1)
         send(packet2)
 
+    def fragmentAndSendAPacket(self, payload, octets=1, ident=133706465):
+        ip=IPv6(src=self.srcIP, dst=self.destIP)
+        p = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
+        fragpt=str(ip/tcp/payload)[40:]
+        rem=fragpt
+        for off in range(0, len(fragpt), octets*8):
+            fraghead=IPv6ExtHdrFragment(offset=(off/8), m=1, id=ident, nh=6)
+            load=fragpt[off:off+(octets*8)]
+            pack=ip/fraghead/load
+            send(pack)
+            rem=fragpt[off+(octets*8):]
+        finalHead=IPv6ExtHdrFragment(offset=(len(fragpt)/8), m=0, id=ident, nh=6)
+        send(ip/finalHead/rem)
+
+        print '[IPv6] Sent, seq=' + str(self.seq) + ', ack=' + str(self.ack)
+
     # doesn't work
     def fin(self):
         ip = IPv6(src=self.srcIP, dst=self.destIP)
@@ -69,7 +85,10 @@ if __name__ == '__main__':
     payload1 = Raw("AABBCCDD")
     payload2 = Raw("EEFFGGHH")
 
+    benignhttp="GET /?q=fuck+shit+cuss"
+
     packetEngine = PacketEngine(sys.argv[1])
-    packetEngine.handshake()
+    packetEngine.handshake(benignhttp)
     #packetEngine.sendPacket(payload1)
-    packetEngine.sendFragmentedPackets(payload1, payload2)
+    #packetEngine.sendFragmentedPackets(payload1, payload2)
+    packetEngine.fragmentAndSendAPacket()
