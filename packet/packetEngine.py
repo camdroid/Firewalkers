@@ -56,14 +56,14 @@ class PacketEngine:
         rem=fragpt
         for off in range(0, len(fragpt), octets*8):
             m=1
-            if (off+1)*8 > len(fragpt):
+            if (off+octets*8) > len(fragpt):
                 m=0
             fraghead=IPv6ExtHdrFragment(offset=(off/8), m=m, id=ident, nh=6)
             load=fragpt[off:off+(octets*8)]
             pack=ip/fraghead/load
             send(pack)
             #pack.show()
-            rem=fragpt[off+(octets*8):]
+            #rem=fragpt[off+(octets*8):]
         #finalHead=IPv6ExtHdrFragment(offset=(len(fragpt)/8), m=0, id=ident, nh=6)
         #finalpak=ip/finalHead/rem
         #finalpak.show()
