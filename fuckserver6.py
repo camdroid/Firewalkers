@@ -11,9 +11,9 @@ s.bind((HOST, PORT))
 print "lol"
 s.listen(1)
 print "lol"
+conn, addr = s.accept()
 
 while 1:
-	conn, addr = s.accept()
 	print 'Connected by', addr
 	data = conn.recv(1024)
 	print data

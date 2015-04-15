@@ -3,8 +3,8 @@
 from scapy.all import *
 from scapy_http.http import HTTPRequest, HTTP
 
-def hitUp(server="68.56.145.25", port= 80):	
-	sock = socket.socket()
+def hitUp(server="2601:4:f01:67d2:dca7:5169:52f5:71a", port= 80):	
+	sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
 	sock.connect((server, port))
 	ssock=StreamSocket(sock)
 	#h=HTTPRequest(Method="GET", Path="/?falun")
@@ -16,15 +16,15 @@ def hitUp(server="68.56.145.25", port= 80):
 if __name__ == '__main__':
 	ssock= hitUp()
 	print "Sendin Sum Packetz: Jake Debolt 2015"
-#	with open('censorship.txt', 'r') as censorfile:
-#		for line in censorfile:
-#			packetText="GET /?"+line+"\n"
-#			print packetText+"\n............-----------.............."
-#			ssock.send(packetText)
-#			resp=ssock.recv(1024)
-#			print resp
-#			print "_________________________________________"
-#
+	with open('censorship.txt', 'r') as censorfile:
+		for line in censorfile:
+			packetText="GET /?"+line+"\n"
+			print packetText+"\n............-----------.............."
+			ssock.send(packetText)
+			resp=ssock.recv(1024)
+			print resp
+			print "_________________________________________"
+
 #	with open('censorship.txt', 'r') as censorf:
 #		ptext=""
 #		for line in censorf:
