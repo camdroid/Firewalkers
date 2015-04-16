@@ -1,2 +1,6 @@
 
 *.pcapng
+
+*.pcap
+
+scramble.pcap.gz
