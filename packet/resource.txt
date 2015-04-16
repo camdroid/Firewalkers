@@ -1,3 +1,0 @@
-http://www.idsv6.de/Downloads/IPv6PacketCreationWithScapy.pdf
-http://media.blackhat.com/bh-eu-12/Atlasis/bh-eu-12-Atlasis-Attacking_IPv6-Slides.pdf
-http://media.blackhat.com/bh-eu-12/Atlasis/bh-eu-12-Atlasis-Attacking_IPv6-WP.pdf
