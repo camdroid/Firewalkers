@@ -15,10 +15,11 @@ class PacketEngine:
         self.ack = 0 
         self.dport = int(dport)
         self.sport = 5555
-        self.destIP = '::1'
-        self.srcIP = '::1'
+        self.destIP = '2604:a880:800:10::7df:6001'
+        self.srcIP = '2400:a480:f:190:a5::2a'
 
     def handshake(self):
+        print '[START HANDSHAKE]'
         ip = IPv6(src=self.srcIP, dst=self.destIP)
         syn = ip/TCP(sport=self.sport, dport=self.dport, flags="S", seq=self.seq)
         print '[SYN] Sending, seq=' + str(self.seq)
@@ -27,10 +28,11 @@ class PacketEngine:
 
         ack = ip/TCP(sport=self.sport, dport=self.dport, flags="A", seq=synack.ack, ack=synack.seq+1)
         send(ack)
-        print '[ACK] Sent, seq=' + str(synack.ack+1) + ', ack=' + str(synack.seq+1)
+        print '[ACK] Sent, seq=' + str(synack.ack) + ', ack=' + str(synack.seq+1)
 
         self.seq = synack.ack
         self.ack = synack.seq+1
+        print '[END HANDSHAKE]'
 
     def sendPacket(self, payload):
         ip = IPv6(src=self.srcIP, dst=self.destIP)
@@ -39,6 +41,17 @@ class PacketEngine:
         tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
         send(ip/tcp/payload)
         print '[IPv6] Sent, seq=' + str(self.seq) + ', ack=' + str(self.ack)
+	self.seq += len(payload)
+
+    def traceroute(self, payload):
+        print '[START TRACEROUTE]'
+        ip = IPv6(src=self.srcIP, dst=self.destIP, hlim=(1,18))
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
+        ans,unans=sr(ip/tcp/payload)
+
+        for snd,rcv in ans:
+            print snd.hlim, rcv.src, isinstance(rcv.payload, TCP)
+        print '[END TRACEROUTE]'
 
     def sendFragmentedPackets(self, payload1, payload2):
         ip = IPv6(src=self.srcIP, dst=self.destIP, plen=16)
@@ -89,11 +102,9 @@ if __name__ == '__main__':
 
     payload1 = Raw("AABBCCDD")
     payload2 = Raw("EEFFGGHH")
-
-    benignhttp='GET /?q=fuck+shit+cuss\n\n'
+    censoredPayload = Raw('GET /?q=vpn.*\xe5\x85\x8d\xe8\xb4\xb9\n\n') 
+    benignPayload = Raw("GET /?q=fuck+shit+cuss\n\n")
 
     packetEngine = PacketEngine(sys.argv[1])
     packetEngine.handshake()
-    #packetEngine.sendPacket(payload1)
-    #packetEngine.sendFragmentedPackets(payload1, payload2)
-    packetEngine.fragmentAndSendAPacket(benignhttp)
+    packetEngine.traceroute(payload1)
