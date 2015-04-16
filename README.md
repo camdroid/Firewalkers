@@ -7,6 +7,7 @@
 [Chinese Internet Users Circumventing Censorship (Apr 2013)](https://openitp.org/pdfs/CollateralFreedom.pdf)  
 [How China is Blocking Tor (Apr 2012)](http://arxiv.org/pdf/1204.0447v1.pdf)  
 [Internet Censorship in China: Where Does the Filtering Occur? (2011)](http://pam2011.gatech.edu/papers/pam2011--Xu.pdf)  
+[ConceptDoppler: A Weather Tracker for Internet Censorship (2007)](http://earlbarr.com/publications/conceptDoppler.pdf)
 [The Great Firewall Revealed (Dec 2002)](http://www.internetfreedom.org/files/WhitePaper/ChinaGreatFirewallRevealed.pdf)  
 [Telex](https://telex.cc/)  
 
