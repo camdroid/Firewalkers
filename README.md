@@ -8,7 +8,7 @@
 [How China is Blocking Tor (Apr 2012)](http://arxiv.org/pdf/1204.0447v1.pdf)  
 [Internet Censorship in China: Where Does the Filtering Occur? (2011)](http://pam2011.gatech.edu/papers/pam2011--Xu.pdf)  
 [ConceptDoppler: A Weather Tracker for Internet Censorship (2007)](http://earlbarr.com/publications/conceptDoppler.pdf)  
-[Ignoring the Great Firewall of China (2006)](http://link.springer.com/chapter/10.1007%2F11957454_2)  
+[Ignoring the Great Firewall of China (2006)](https://www.cl.cam.ac.uk/~rnc1/ignoring.pdf)  
 [The Great Firewall Revealed (Dec 2002)](http://www.internetfreedom.org/files/WhitePaper/ChinaGreatFirewallRevealed.pdf)  
 [Telex](https://telex.cc/)  
 
