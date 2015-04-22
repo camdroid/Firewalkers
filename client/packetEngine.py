@@ -39,9 +39,19 @@ class PacketEngine:
         extension = IPv6ExtHdrHopByHop()
 
         tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
-        send(ip/tcp/payload)
+        sr1(ip/tcp/payload)
         print '[IPv6] Sent, seq=' + str(self.seq) + ', ack=' + str(self.ack)
-	self.seq += len(payload)
+        self.seq += len(payload)
+
+    def recvPacket(self):
+        lf=lambda (r): TCP in r and r[TCP].port==self.dport and r[IPv6].src == self.destIP
+        ip = IPv6(src=self.srcIP, dst=self.destIP)
+        pack=sniff(count=1, lfilter=lf)[0]
+        data=str(pack[Raw])
+        self.ack+=len(data)
+        ack=TCP(sport=self.sport, dport=self.dport, flags="A", seq=self.seq, ack=self.ack)
+        send(ip/ack)
+        return data
 
     def traceroute(self, payload):
         print '[START TRACEROUTE]'
@@ -62,7 +72,7 @@ class PacketEngine:
         send(packet1)
         send(packet2)
 
-    def fragmentAndSendAPacket(self, payload, octets=1, ident=133706465):
+    def fragmentNormal(self, payload, octets=160, ident=133876465):
         ip=IPv6(src=self.srcIP, dst=self.destIP)
         tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
         fragpt=str(ip/tcp/payload)[40:]
@@ -71,17 +81,52 @@ class PacketEngine:
             m=1
             if (off+octets*8) > len(fragpt):
                 m=0
+            print off/8
             fraghead=IPv6ExtHdrFragment(offset=(off/8), m=m, id=ident, nh=6)
-            load=fragpt[off:off+(octets*8)]
+            load=fragpt[off:min(off+(octets*8), len(fragpt))]
             pack=ip/fraghead/load
             send(pack)
-            #pack.show()
-            #rem=fragpt[off+(octets*8):]
-        #finalHead=IPv6ExtHdrFragment(offset=(len(fragpt)/8), m=0, id=ident, nh=6)
-        #finalpak=ip/finalHead/rem
-        #finalpak.show()
+
+    def fragmentSmallMTU(self, payload, octets=1, ident=133706465):
+        ip=IPv6(src=self.srcIP, dst=self.destIP)
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
+        fragpt=str(ip/tcp/payload)[40:]
+        rem=fragpt
+        for off in range(0, len(fragpt), octets*8):
+            m=1
+            if (off+octets*8) > len(fragpt):
+                m=0
+            print off/8
+            fraghead=IPv6ExtHdrFragment(offset=(off/8), m=m, id=ident, nh=6)
+            load=fragpt[off:min(off+(octets*8), len(fragpt))]
+            pack=ip/fraghead/load
+            send(pack)
+            if off==0: send(pack)
 
         print '[IPv6] Sent, seq=' + str(self.seq) + ', ack=' + str(self.ack)
+
+    def fragmentTotalOverlap(self, payload, targets, octets=3, originalFirst=True):
+        targets=set(targets)
+        ip=IPv6(src=self.srcIP, dst=self.destIP)
+        tcp = TCP(sport=self.sport, dport=self.dport, flags="PA", seq=self.seq, ack=self.ack)
+        fragpt=str(ip/tcp/payload)[40:]
+        rem=fragpt
+        for off in range(0, len(fragpt), octets*8):
+            m=1
+            if (off+octets*8) > len(fragpt):
+                m=0
+            print off/8
+            fraghead=IPv6ExtHdrFragment(offset=(off/8), m=m, id=ident, nh=6)
+            if off/8 in targets and not originalFirst:
+                send(ip/fraghead/Raw("CENSORED"*octets))
+            load=fragpt[off:min(off+(octets*8), len(fragpt))]
+            pack=ip/fraghead/load
+            send(pack)
+            if off/8 in targets and originalFirst:
+                send(ip/fraghead/Raw("CENSORED"*octets))
+            
+    def fragmentPartialOverlap():
+        pass
 
     # doesn't work
     def fin(self):
@@ -100,11 +145,11 @@ if __name__ == '__main__':
         print "Destination Port Required"
         sys.exit(0)
 
-    payload1 = Raw("AABBCCDD")
-    payload2 = Raw("EEFFGGHH")
-    censoredPayload = Raw('GET /?q=vpn.*\xe5\x85\x8d\xe8\xb4\xb9\n\n') 
-    benignPayload = Raw("GET /?q=fuck+shit+cuss\n\n")
+    #censoredPayload = Raw('GET /?q=vpn.*\xe5\x85\x8d\xe8\xb4\xb9\n\n') 
+    benignPayload = Raw("GET /?q=poopypants")
+    bigCensored=Raw("GET /?q="+"lol+"*300+"vpn.*\xe5\x85\x8d\xe8\xb4\xb9+"+"hoh+"*5+"done\n\n")
 
     packetEngine = PacketEngine(sys.argv[1])
     packetEngine.handshake()
-    packetEngine.traceroute(payload1)
+    packetEngine.fragmentSmallMTU(benignPayload)
+    #packetEngine.traceroute(payload1)
