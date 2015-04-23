@@ -9,7 +9,7 @@ if __name__ == '__main__':
         print "Destination Port Required"
         sys.exit(0)
 
-    sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(("", int(sys.argv[1])))
     sock.listen(1)
     conn, addr = sock.accept()
@@ -20,7 +20,7 @@ if __name__ == '__main__':
             data = conn.recv(1024)
             print data
         except:
-            sock = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.bind(("", int(sys.argv[1])))
             sock.listen(1)
             conn, addr = sock.accept()
